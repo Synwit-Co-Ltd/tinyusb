@@ -25,9 +25,8 @@
  */
 
 #include "tusb_option.h"
-#include "device/dcd_attr.h"
 
-#if TUSB_OPT_DEVICE_ENABLED && defined(DCD_ATTR_CONTROLLER_CHIPIDEA_HS)
+#if CFG_TUD_ENABLED && defined(TUP_USBIP_CHIPIDEA_HS)
 
 //--------------------------------------------------------------------+
 // INCLUDE
@@ -35,7 +34,7 @@
 #include "device/dcd.h"
 #include "ci_hs_type.h"
 
-#if CFG_TUSB_MCU == OPT_MCU_MIMXRT10XX
+#if CFG_TUSB_MCU == OPT_MCU_MIMXRT
   #include "ci_hs_imxrt.h"
 #elif TU_CHECK_MCU(OPT_MCU_LPC18XX, OPT_MCU_LPC43XX)
   #include "ci_hs_lpc18_43.h"
@@ -152,8 +151,8 @@ typedef struct {
   // Must be at 2K alignment
   // Each endpoint with direction (IN/OUT) occupies a queue head
   // for portability, TinyUSB only queue 1 TD for each Qhd
-  dcd_qhd_t qhd[DCD_ATTR_ENDPOINT_MAX][2] TU_ATTR_ALIGNED(64);
-  dcd_qtd_t qtd[DCD_ATTR_ENDPOINT_MAX][2] TU_ATTR_ALIGNED(32);
+  dcd_qhd_t qhd[TUP_DCD_ENDPOINT_MAX][2] TU_ATTR_ALIGNED(64);
+  dcd_qtd_t qtd[TUP_DCD_ENDPOINT_MAX][2] TU_ATTR_ALIGNED(32);
 }dcd_data_t;
 
 CFG_TUSB_MEM_SECTION TU_ATTR_ALIGNED(2048)
@@ -265,6 +264,14 @@ void dcd_disconnect(uint8_t rhport)
 {
   ci_hs_regs_t* dcd_reg = CI_HS_REG(rhport);
   dcd_reg->USBCMD &= ~USBCMD_RUN_STOP;
+}
+
+void dcd_sof_enable(uint8_t rhport, bool en)
+{
+  (void) rhport;
+  (void) en;
+
+  // TODO implement later
 }
 
 //--------------------------------------------------------------------+
@@ -620,7 +627,7 @@ void dcd_int_handler(uint8_t rhport)
 
     if ( edpt_complete )
     {
-      for(uint8_t epnum = 0; epnum < DCD_ATTR_ENDPOINT_MAX; epnum++)
+      for(uint8_t epnum = 0; epnum < TUP_DCD_ENDPOINT_MAX; epnum++)
       {
         if ( tu_bit_test(edpt_complete, epnum)    ) process_edpt_complete_isr(rhport, epnum, TUSB_DIR_OUT);
         if ( tu_bit_test(edpt_complete, epnum+16) ) process_edpt_complete_isr(rhport, epnum, TUSB_DIR_IN);

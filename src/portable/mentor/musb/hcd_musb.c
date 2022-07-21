@@ -26,7 +26,7 @@
 
 #include "tusb_option.h"
 
-#if TUSB_OPT_HOST_ENABLED && \
+#if CFG_TUH_ENABLED && \
   TU_CHECK_MCU(OPT_MCU_MSP432E4, OPT_MCU_TM4C123, OPT_MCU_TM4C129)
 
 #if __GNUC__ > 8 && defined(__ARM_FEATURE_UNALIGNED)
@@ -615,6 +615,11 @@ void hcd_port_reset(uint8_t rhport)
   while (cnt--) __NOP();
   USB0->POWER &= ~USB_POWER_RESET;
   _hcd.need_reset = false;
+}
+
+void hcd_port_reset_end(uint8_t rhport)
+{
+  (void) rhport;
 }
 
 tusb_speed_t hcd_port_speed_get(uint8_t rhport)

@@ -27,7 +27,7 @@
 
 #include "tusb_option.h"
 
-#if TUSB_OPT_HOST_ENABLED && ( CFG_TUSB_MCU == OPT_MCU_RX63X || \
+#if CFG_TUH_ENABLED && ( CFG_TUSB_MCU == OPT_MCU_RX63X || \
                                CFG_TUSB_MCU == OPT_MCU_RX65X || \
                                CFG_TUSB_MCU == OPT_MCU_RX72N )
 #include "host/hcd.h"
@@ -618,6 +618,11 @@ void hcd_port_reset(uint8_t rhport)
   USB0.DVSTCTR0.BIT.USBRST = 0;
   USB0.DVSTCTR0.BIT.UACT   = 1;
   _hcd.need_reset = false;
+}
+
+void hcd_port_reset_end(uint8_t rhport)
+{
+  (void) rhport;
 }
 
 tusb_speed_t hcd_port_speed_get(uint8_t rhport)

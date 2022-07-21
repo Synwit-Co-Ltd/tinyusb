@@ -1,0 +1,55 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"examples/host": true,
+			"examples/device/{[^c]*,*[^c]}": true,
+			"hw/bsp/{[^sb]*,?[^wo]*}": true,
+			"hw/mcu/{[^s]*,?[^y]*}": true,
+			"lib/{[^fS]*}": true,
+			"src/portable/{[^s]*,?[^y]*,*[^t]}": true,
+			"test": true,
+			"tools": true,
+			".git*": true,
+			"*.rst": true,
+			"*.yml": true,
+			"*.yaml": true,
+			"**/*.o": true,
+		},
+		"files.associations": {
+			"*.h": "c"
+		},
+		"C_Cpp.default.compilerPath": "D:/Ubuntu/bin/gcc-arm-win/bin/arm-none-eabi-gcc.exe",
+		"C_Cpp.default.includePath": [
+			"${workspaceFolder}/**"
+		],
+		"C_Cpp.default.defines": [
+			"CFG_TUSB_MCU = OPT_MCU_SWM341"
+		],
+		"cortex-debug.registerUseNaturalFormat": false,
+		"cortex-debug.variableUseNaturalFormat": false
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"type": "cortex-debug",
+				"name": "Cortex Debug",
+				"cwd": "${workspaceRoot}/examples/device/cdc_msc/src",
+				"executable": "../_build/swm341/cdc_msc.elf",
+				"runToEntryPoint": "main",
+				"request": "launch",
+				"servertype": "jlink",
+				"interface": "swd",
+				"device": "Cortex-M33",
+				"postLaunchCommands": [
+					"set substitute-path /mnt/d/Ubuntu D:/Ubuntu"
+				]
+			}
+		]
+	}
+}

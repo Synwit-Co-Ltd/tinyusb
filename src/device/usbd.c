@@ -287,7 +287,7 @@ static osal_mutex_t _usbd_mutex;
 // Prototypes
 //--------------------------------------------------------------------+
 static bool process_control_request(uint8_t rhport, tusb_control_request_t const * p_request);
-static bool process_set_config(uint8_t rhport, uint8_t cfg_num);
+bool process_set_config(uint8_t rhport, uint8_t cfg_num);
 static bool process_get_descriptor(uint8_t rhport, tusb_control_request_t const * p_request);
 
 // from usbd_control.c
@@ -884,7 +884,7 @@ static bool process_control_request(uint8_t rhport, tusb_control_request_t const
 
 // Process Set Configure Request
 // This function parse configuration descriptor & open drivers accordingly
-static bool process_set_config(uint8_t rhport, uint8_t cfg_num)
+bool process_set_config(uint8_t rhport, uint8_t cfg_num)
 {
   // index is cfg_num-1
   tusb_desc_configuration_t const * desc_cfg = (tusb_desc_configuration_t const *) tud_descriptor_configuration_cb(cfg_num-1);

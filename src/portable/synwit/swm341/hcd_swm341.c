@@ -28,7 +28,7 @@ typedef struct
 
 typedef struct
 {
-    pipe_t   pipe[HCD_MAX_XFER * 2];    // OUT, IN
+    pipe_t   pipe[CFG_TUH_ENDPOINT_MAX * 2];    // OUT, IN
     uint32_t in_progress; // Bitmap. Each bit indicates that a transfer of the corresponding pipe is in progress
     uint32_t pending;     // Bitmap. Each bit indicates that a transfer of the corresponding pipe will be resume the next frame
 } hcd_data_t;
@@ -42,7 +42,7 @@ static hcd_data_t _hcd;
 
 static int find_pipe(uint8_t dev_addr, uint8_t ep_addr)
 {
-    for(int i = 0; i < HCD_MAX_XFER * 2; i++)
+    for(int i = 0; i < CFG_TUH_ENDPOINT_MAX * 2; i++)
     {
         pipe_t *p = &_hcd.pipe[i];
         if((p->dev_addr == dev_addr) && (p->ep_addr == ep_addr))
@@ -235,6 +235,11 @@ void hcd_port_reset(uint8_t rhport)
     USBH_ResetPort();
 }
 
+void hcd_port_reset_end(uint8_t rhport)
+{
+    (void) rhport;
+}
+
 tusb_speed_t hcd_port_speed_get(uint8_t rhport)
 {
     (void)rhport;
@@ -250,7 +255,7 @@ void hcd_device_close(uint8_t rhport, uint8_t dev_addr)
     NVIC_DisableIRQ(USB_IRQn);
 
     pipe_t *p   = &_hcd.pipe[2];
-    pipe_t *end = &_hcd.pipe[HCD_MAX_XFER * 2];
+    pipe_t *end = &_hcd.pipe[CFG_TUH_ENDPOINT_MAX * 2];
     for(;p != end; ++p)
     {
         if(p->dev_addr == dev_addr)
@@ -294,7 +299,7 @@ bool hcd_edpt_open(uint8_t rhport, uint8_t dev_addr, tusb_desc_endpoint_t const 
     
     /* Find a free pipe */
     pipe_t *p = &_hcd.pipe[0];
-    pipe_t *end = &_hcd.pipe[HCD_MAX_XFER * 2];
+    pipe_t *end = &_hcd.pipe[CFG_TUH_ENDPOINT_MAX * 2];
     if(dev_addr || ep_addr)
     {
         for(p += 2; p < end && (p->dev_addr || p->ep_addr); ++p) __NOP();

@@ -87,7 +87,6 @@ CFLAGS += \
   -fno-strict-aliasing \
   -Wall \
   -Wextra \
-  -Werror \
   -Wfatal-errors \
   -Wdouble-promotion \
   -Wstrict-prototypes \

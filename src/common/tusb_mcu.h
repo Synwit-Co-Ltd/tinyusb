@@ -267,7 +267,7 @@
 
 //------------ Synwit -------------//
 #elif TU_CHECK_MCU(OPT_MCU_SWM341)
-  #define DCD_ATTR_ENDPOINT_MAX   8
+  #define TUP_DCD_ENDPOINT_MAX   8
 
 #endif
 
